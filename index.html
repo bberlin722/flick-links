@@ -499,6 +499,23 @@ body.pm #board{display:none!important}
 #p2pOv .plist .empty{background:transparent;border:1px dashed rgba(255,255,255,.16);color:rgba(255,255,255,.45);font-size:13px}
 #p2pOv .pstat{min-height:20px;font-size:13px;color:#ffd23c;margin:8px 0 0}
 #p2pOv .solo{width:100%;margin-top:12px;background:transparent}
+#p2pOv .pchars{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
+#p2pOv .pchars button{min-height:0;height:auto;padding:4px 2px 5px;border-radius:12px;display:flex;flex-direction:column;align-items:center;gap:2px;background:rgba(255,255,255,.05);font:700 12px 'Barlow Condensed',sans-serif;letter-spacing:.2px}
+#p2pOv .pchars button canvas{width:44px;height:55px}
+#p2pOv .pchars button.on{background:rgba(255,210,60,.16);border-color:#ffd23c;box-shadow:0 0 0 1px #ffd23c inset}
+#p2pOv .pchars button small{font:inherit;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+#p2pOv .pdet{display:grid;grid-template-columns:96px minmax(0,1fr);gap:4px 14px;margin-top:10px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);align-items:start}
+#p2pOv .pdet canvas{width:96px;height:120px;grid-row:span 2}
+#p2pOv .pdet h3{margin:0;font:800 24px/1 'Barlow Condensed',sans-serif}#p2pOv .pdet p{margin:3px 0 8px;font-size:12.5px;color:rgba(255,255,255,.72);line-height:1.35}
+#p2pOv .pbars{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px 8px;align-items:center;font-size:12px}
+#p2pOv .pbars span{color:rgba(255,255,255,.75)}#p2pOv .pbars i{height:8px;border-radius:4px;background:rgba(255,255,255,.12);position:relative;overflow:hidden}#p2pOv .pbars i:after{content:'';position:absolute;inset:0 auto 0 0;width:calc(var(--v)*20%);background:#ffd23c;border-radius:4px}#p2pOv .pbars b{font-size:12px;min-width:1.4em;text-align:right}
+#p2pOv .pskins{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:6px}
+#p2pOv .pskins button[data-j]{flex:none;width:40px;height:40px;min-height:0;padding:0;border-radius:50%;border:3px solid transparent}
+#p2pOv .pskins button[data-j].on{border-color:#fff;box-shadow:0 0 0 3px rgba(255,210,60,.7)}
+#p2pOv .pskins em{font-style:normal;font-size:12px;color:rgba(255,255,255,.7);flex:1 1 auto;min-width:6em}
+#p2pOv .phand{display:flex;gap:6px;margin-left:auto}#p2pOv .phand button{min-height:36px;padding:0 10px;font-size:15px}#p2pOv .phand button.on{background:#ffd23c;color:#1f1a02;border-color:transparent}
+#p2pOv .plist canvas{width:30px;height:38px;flex:none}#p2pOv .plist small.ch{color:rgba(255,255,255,.55)}
+@media(max-width:420px){#p2pOv .pchars{grid-template-columns:repeat(3,minmax(0,1fr))}#p2pOv .pdet{grid-template-columns:80px minmax(0,1fr)}#p2pOv .pdet canvas{width:80px;height:100px}}
 #p2pBan{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:25;display:flex;align-items:center;gap:10px;padding:10px 18px;border-radius:999px;background:rgba(9,22,17,.86);border:1px solid rgba(255,255,255,.16);color:#fff;font:800 20px/1 'Barlow Condensed',sans-serif;letter-spacing:.3px;pointer-events:none;max-width:min(92vw,460px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #p2pBan[hidden]{display:none}#p2pBan i{width:14px;height:14px;border-radius:50%;flex:none}#p2pBan small{font:600 13px Inter,sans-serif;color:rgba(255,255,255,.7)}
 body.p2p-spect #swingCtl,body.p2p-spect #aimL,body.p2p-spect #aimR,body.p2p-spect #spinFloat,body.p2p-spect #camReset,body.p2p-spect #shotStats{visibility:hidden!important}
@@ -512,11 +529,12 @@ body.p2p-spect #swingCtl,body.p2p-spect #aimL,body.p2p-spect #aimR,body.p2p-spec
   <div id="p2pSetup">
    <label for="p2pName">Your name</label>
    <input id="p2pName" maxlength="16" autocomplete="off" placeholder="Player">
-   <label>Ball colour</label>
-   <div class="cols" id="p2pCols"></div>
-   <div class="prow2" style="margin-top:14px"><button class="pri" id="p2pCreate">Create Room</button></div>
+   <label>Your golfer</label>
+   <div class="pchars" id="p2pChars" role="listbox" aria-label="Golfers"></div>
+   <div class="pdet" id="p2pDet"></div>
+   <div id="p2pConn"><div class="prow2" style="margin-top:14px"><button class="pri" id="p2pCreate">Create Room</button></div>
    <div class="or">or join a friend</div>
-   <div class="prow2"><input id="p2pCode" maxlength="4" placeholder="CODE" autocomplete="off" autocapitalize="characters" aria-label="Room code" style="text-transform:uppercase;letter-spacing:4px;font-weight:800"><button id="p2pJoin" style="flex:none">Join Room</button></div>
+   <div class="prow2"><input id="p2pCode" maxlength="4" placeholder="CODE" autocomplete="off" autocapitalize="characters" aria-label="Room code" style="text-transform:uppercase;letter-spacing:4px;font-weight:800"><button id="p2pJoin" style="flex:none">Join Room</button></div></div>
   </div>
   <div id="p2pLobby" hidden>
    <div class="psub" style="margin:0;text-align:center">Room code</div>
@@ -2224,7 +2242,8 @@ const P={name:'',col:0};try{Object.assign(P,JSON.parse(localStorage.getItem('fli
 const saveP=()=>{try{localStorage.setItem('flicklinks-p2p',JSON.stringify(P))}catch(_){}};
 const q=s=>document.querySelector(s);
 const stat=t=>{q('#p2pStat').textContent=t||''};
-const myProf=()=>({n:(P.name||'').trim().slice(0,16)||'Player',c:P2PCOL[P.col|0],ch:M.onChar|0,sk:M.onSkin|0,hd:M.onHand||'R'});
+const chIdx=()=>clamp(M.onChar|0,0,CHARS.length-1),skIdx=()=>clamp(M.onSkin|0,0,CHARS[chIdx()].skins.length-1);
+const myProf=()=>{const C=CHARS[chIdx()],S=C.skins[skIdx()];return{n:(P.name||'').trim().slice(0,16)||'Player',c:S.shirt,ch:chIdx(),sk:skIdx(),hd:M.onHand||'R'}};
 const mine=()=>G.p2p&&G.players.length&&curP()&&curP().pid===NET2.me;
 const snap=b=>{const o={};for(const k in b)if(k!=='trail')o[k]=b[k];return JSON.parse(JSON.stringify(o))};
 
@@ -2263,18 +2282,28 @@ async function openRoom(code){
 const send=(t,d,to)=>{if(NET2.room)try{NET2.room.send(t,d,to)}catch(_){}};
 
 /* ---------- lobby overlay ---------- */
-function renderCols(){const used=new Set(NET2.order.filter(p=>p!==NET2.me).map(p=>NET2.profs[p]&&NET2.profs[p].c));
- q('#p2pCols').innerHTML=P2PCOL.map((c,i)=>`<button data-i="${i}" class="${i===(P.col|0)?'on':''}" style="background:${c}" aria-label="Colour ${i+1}${used.has(c)?' (taken)':''}" title="${used.has(c)?'Another player has this colour':''}"></button>`).join('');
- q('#p2pCols').querySelectorAll('button').forEach(b=>b.onclick=()=>{P.col=+b.dataset.i;saveP();renderCols();profChanged()});}
+function renderCols(){
+ const box=q('#p2pChars'),ci=chIdx(),si=skIdx(),C=CHARS[ci];
+ if(box.childElementCount!==CHARS.length){box.innerHTML=CHARS.map((c,i)=>`<button data-i="${i}" role="option"><canvas width="64" height="80"></canvas><small>${esc(c.n)}</small></button>`).join('');
+  box.querySelectorAll('button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;if(i!==chIdx()){M.onChar=i;M.onSkin=0;saveM();renderCols();profChanged()}})}
+ box.querySelectorAll('button').forEach(b=>{const i=+b.dataset.i,on=i===ci;b.classList.toggle('on',on);b.setAttribute('aria-selected',on);portrait(b.querySelector('canvas'),i,on?si:0)});
+ const S=C.skins[si];
+ q('#p2pDet').innerHTML=`<canvas width="64" height="80"></canvas><div><h3>${esc(C.n)}</h3><p>${esc(C.d||'')}</p></div><div class="pbars">${STATN.map((n,k)=>`<span>${n}</span><i style="--v:${C.st[k]}"></i><b>${C.st[k]}/5</b>`).join('')}</div>
+  <div class="pskins">${C.skins.map((k,j)=>`<button data-j="${j}" class="${j===si?'on':''}" title="${esc(k.n)}" aria-label="${esc(k.n)} colours" style="background:linear-gradient(135deg,${k.shirt} 0 50%,${k.hat===k.shirt?k.shirt2:k.hat} 50%)"></button>`).join('')}<em>${esc(S.n)} colours</em><span class="phand"><button data-h="R" class="${(M.onHand||'R')==='R'?'on':''}">Righty</button><button data-h="L" class="${M.onHand==='L'?'on':''}">Lefty</button></span></div>`;
+ portrait(q('#p2pDet canvas'),ci,si);
+ q('#p2pDet').querySelectorAll('.pskins button[data-j]').forEach(b=>b.onclick=()=>{M.onSkin=+b.dataset.j;saveM();renderCols();profChanged()});
+ q('#p2pDet').querySelectorAll('.phand button').forEach(b=>b.onclick=()=>{M.onHand=b.dataset.h;saveM();renderCols();profChanged()});
+}
 function profChanged(){if(!NET2.room)return;NET2.profs[NET2.me]=myProf();send('prof',myProf());if(NET2.host)lobbyOut();renderLobby()}
 function renderLobby(){
  const inRoom=!!NET2.room;q('#p2pSetup').hidden=inRoom&&!G.p2p?false:false;
  q('#p2pLobby').hidden=!inRoom;q('#p2pSetup').querySelector('#p2pCreate').disabled=inRoom;q('#p2pJoin').disabled=inRoom;q('#p2pCode').disabled=inRoom;
+ q('#p2pConn').hidden=inRoom;
  if(!inRoom)return;
  q('#p2pCodeShow').textContent=NET2.code;
- const rows=NET2.order.map(pid=>{const p=NET2.profs[pid]||{n:'Joining…',c:'#888'};return`<div><i style="background:${esc(p.c)}"></i><span>${esc(p.n)}${pid===NET2.me?' (you)':''}</span><small>${pid===(NET2.host?NET2.me:NET2.hostId)?'Host':''}</small></div>`});
+ const rows=NET2.order.map(pid=>{const p=NET2.profs[pid]||{n:'Joining…',c:'#888'},cn=CHARS[p.ch|0]?CHARS[p.ch|0].n:'';return`<div data-pid="${esc(pid)}"><canvas width="64" height="80"></canvas><span>${esc(p.n)}${pid===NET2.me?' (you)':''}<br><small class="ch">${esc(cn)}${p.hd==='L'?' · lefty':''}</small></span><small>${pid===(NET2.host?NET2.me:NET2.hostId)?'Host':''}</small></div>`});
  for(let i=NET2.order.length;i<4;i++)rows.push('<div class="empty">Open slot</div>');
- q('#p2pList').innerHTML=rows.join('');
+ q('#p2pList').innerHTML=rows.join('');q('#p2pList').querySelectorAll('[data-pid]').forEach(d=>{const p=NET2.profs[d.dataset.pid];if(p&&CHARS[p.ch|0])portrait(d.querySelector('canvas'),p.ch|0,p.sk|0)});
  q('#p2pHostOpts').hidden=!NET2.host;
  q('#p2pStart').disabled=NET2.order.length<1;
  q('#p2pStart').textContent=NET2.order.length<2?'Start (waiting for friends…)':'Start Multiplayer Game';
@@ -2302,7 +2331,6 @@ async function enter(code,host){
  R.on('lobby',(d,pid)=>{if(NET2.host&&pid!==NET2.me)return;
   if(!d.order.includes(NET2.me)){if(d.full){stat('That room is full (4 players).');leave(true)}else if(d.started){stat('That game has already started. Ask the host to start a new room.');leave(true)}return}
   NET2.hostId=d.hostId||pid;NET2.order=d.order.slice();Object.assign(NET2.profs,d.profs||{});
-  {const taken=new Set(NET2.order.filter(x=>x!==NET2.me).map(x=>NET2.profs[x]&&NET2.profs[x].c));if(taken.has(P2PCOL[P.col|0])){const f=P2PCOL.findIndex(c=>!taken.has(c));if(f>=0){P.col=f;saveP();NET2.profs[NET2.me]=myProf();send('prof',myProf())}}}
   NET2.profs[NET2.me]=myProf();renderLobby()});
  R.on('start',(d,pid)=>{if(NET2.host||G.p2p)return;if(!d.players.some(p=>p.pid===NET2.me))return;NET2.hostId=pid;startGame(d)});
  R.on('shot',onShot);R.on('pos',onPos);R.on('rest',onRest);R.on('aim',onAim);R.on('hole',onHole);
