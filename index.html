@@ -345,8 +345,9 @@ table.card{border-collapse:collapse;font:600 17px 'Barlow Condensed',sans-serif;
 @media(max-width:640px){#bStage{display:none!important}}
 #swingCtl.birdmini #ring{transform:var(--bt)!important;transition:transform .35s}#swingCtl.birdmini #retTip{transform:translate(-50%,-50%) scale(1.9);animation:none;padding:6px 10px}#swingCtl.birdmini #needMk,#swingCtl.birdmini #needTag{display:none!important}
 #readyBox{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);z-index:30;text-align:center;padding:12px 18px 14px;border-radius:16px;background:rgba(9,22,17,.86);border:1px solid var(--line);box-shadow:0 10px 30px rgba(0,0,0,.45);min-width:230px}#readyBox[hidden]{display:none}
+body.botturn #ring{pointer-events:none}
 #botBan{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:25;display:flex;align-items:center;gap:10px;padding:10px 18px;border-radius:999px;background:rgba(9,22,17,.86);border:1px solid rgba(255,255,255,.16);color:#fff;font:800 20px/1 'Barlow Condensed',sans-serif;pointer-events:none;max-width:min(92vw,520px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#botBan[hidden]{display:none}#botBan i{width:14px;height:14px;border-radius:50%;flex:none}#botBan small{font:600 13px Inter,sans-serif;color:rgba(255,255,255,.7)}
-body.botturn #swingCtl,body.botturn #aimL,body.botturn #aimR,body.botturn #spinFloat,body.botturn #camReset,body.botturn #shotStats,body.botturn #ssTab{visibility:hidden!important}
+body.botturn #swingCtl .sc-l,body.botturn #swingCtl .sc-r,body.botturn #aimL,body.botturn #aimR,body.botturn #spinFloat,body.botturn #camReset,body.botturn #shotStats,body.botturn #ssTab{visibility:hidden!important}
 .fmtlab{margin:10px 0 4px}#fmtSeg button:disabled{opacity:.35}.botsel{flex:none;min-height:40px;border-radius:10px;background:rgba(255,255,255,.08);color:#fff;border:1px solid var(--line);font:600 13px Inter,sans-serif;padding:0 6px;max-width:7.5em}.botsel option{color:#111}@media(max-width:480px){.botsel{max-width:none;width:7.6em;font-size:12px;padding:0 2px}#names .cbtn{padding:0 8px;min-width:0}#names .prow input{min-width:0;flex:1 1 4em}}
 #board .tm{display:flex;align-items:center;gap:6px;font-weight:700}#board .ms{margin:4px 0 6px;padding:4px 8px;border-radius:8px;background:rgba(255,255,255,.08);font:800 16px 'Barlow Condensed',sans-serif;text-align:center}
 table.card tr.mrow td{font-weight:700}table.card .w0{color:#4aa8ff}table.card .w1{color:#ff5a5a}body:has(#modal:not([hidden])) #readyBox{display:none}
@@ -413,7 +414,7 @@ body.pm #board{display:none!important}
  </div>
  <div class="br">
   <div class="slab swingctl" id="swingCtl">
-   <div class="sc-l"><div class="pwrow"><span id="mPow">0%</span><span class="sub" id="mTempo">Power</span></div><div class="sub" id="mHint">Hold the red dot for 1.5 seconds, then drag to set spin.<br>Swipe it down, then up to swing.</div></div>
+   <div class="sc-l"><div class="pwrow"><span id="mPow">0%</span><span class="sub" id="mTempo">Power</span></div><div class="sub" id="mHint">Hold the red dot for 1 second, then drag to set spin.<br>Swipe it down, then up to swing.</div></div>
    <div id="ring" title="Press your golfer, pull down, then push up to swing"><div id="spdRing"></div><div class="tipw" id="pwTip"><i></i></div><i class="tick"></i><div class="needw" id="needMk" hidden><div class="cap"><b id="needNum"></b></div></div><canvas id="guy" aria-label="Your golfer: press and pull down, then push up to swing"></canvas><div id="retTip" hidden>Tap to return to<br><b>shot view</b></div><div id="pracPad" title="Practice swings: swipe here, nothing counts"><span>PRACTICE<br><small>swipe here</small></span></div></div>
    <div class="sc-r"><div class="sub">Strike point</div><div id="spinLab2" class="spinlab2">Center strike</div><div class="chips" id="chips"></div><div class="trajrow" id="trajRow"><button data-t="-1" title="Low punch: flatter flight that stays under branches and runs out">&#9660; Punch</button><button data-t="0" class="on">Normal</button><button data-t="1" title="High lob: steep flight to get over trees, lands soft">&#9650; Lob</button></div><div class="pmodes" id="pModes" hidden><button data-m="0">Short</button><button data-m="1">Medium</button><button data-m="2">Long</button></div></div>
   </div>
@@ -480,7 +481,7 @@ body.pm #board{display:none!important}
    <div><b>Aim</b><span>Tap or click the course, or hold ◀ ▶.</span></div>
    <div><b>Swing</b><span>Swipe your golfer down, then up. Faster = more power.</span></div>
    <div><b>Practice first</b><span>Double-tap your golfer to switch to the real shot.</span></div>
-   <div><b>Spin</b><span>Hold the red dot 1.5 s, then drag it.</span></div>
+   <div><b>Spin</b><span>Hold the red dot 1 s, then drag it.</span></div>
   </div>
  </div>
 </div>
@@ -547,7 +548,8 @@ body.pm #board{display:none!important}
 @media (orientation:landscape) and (max-height:520px){#emoFab{width:48px;height:48px;font-size:24px;top:50%}#emoWheel .eb{width:64px;height:64px;margin:-32px 0 0 -32px}#emoWheel .eb span{font-size:24px}#emoWheel .eb small{font-size:10px}}
 #p2pBan{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:25;display:flex;align-items:center;gap:10px;padding:10px 18px;border-radius:999px;background:rgba(9,22,17,.86);border:1px solid rgba(255,255,255,.16);color:#fff;font:800 20px/1 'Barlow Condensed',sans-serif;letter-spacing:.3px;pointer-events:none;max-width:min(92vw,460px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #p2pBan[hidden]{display:none}#p2pBan i{width:14px;height:14px;border-radius:50%;flex:none}#p2pBan small{font:600 13px Inter,sans-serif;color:rgba(255,255,255,.7)}
-body.p2p-spect #swingCtl,body.p2p-spect #aimL,body.p2p-spect #aimR,body.p2p-spect #spinFloat,body.p2p-spect #camReset,body.p2p-spect #shotStats{visibility:hidden!important}
+body.p2p-spect #swingCtl .sc-l,body.p2p-spect #swingCtl .sc-r,body.p2p-spect #aimL,body.p2p-spect #aimR,body.p2p-spect #spinFloat,body.p2p-spect #camReset,body.p2p-spect #shotStats{visibility:hidden!important}
+body.p2p-spect #ring{pointer-events:none}
 #p2pNetBtn{margin-top:8px;width:100%}
 @media (orientation:landscape) and (max-height:520px){#p2pBan{font-size:16px;padding:7px 14px;bottom:8px}#p2pOv .pcard{padding:12px 14px}#p2pOv h2{font-size:24px}}
 </style>
@@ -1290,7 +1292,7 @@ function camList(){return G.p3?PCAMS:SCAMS}
 function camIdx(){return G.p3?(G.pcMode||0):(G.shotCam||0)}
 function birdsEye(){return G.stage==='aim'}
 function setStage(st){if(!GLX.ok||G.phase!=='aim')return;G.stage=st;if(st==='aim')autoBird();if(st==='addr'){G.pcCur=null;resetSwing()}stageUI()}
-function stageUI(){const a=G.stage==='aim'&&GLX.ok&&G.phase==='aim',el=$('#bStage');el.hidden=!(a&&GLX.ok);const nar=W<640,tx=a?(nar?'Golfer view \u203A':'Back to golfer view  \u203A'):(nar?'Bird\u2019s eye':'Bird\u2019s eye view');if(el.textContent!==tx){el.textContent=tx;el.classList.toggle('pri',a);$('#mHint').innerHTML=a?'Aim on the map, then press the trackball<br>to go back and swing.':'Hold the red dot for 1.5 seconds, then drag to set spin.<br>Swipe it down, then up to swing.'}}
+function stageUI(){const a=G.stage==='aim'&&GLX.ok&&G.phase==='aim',el=$('#bStage');el.hidden=!(a&&GLX.ok);const nar=W<640,tx=a?(nar?'Golfer view \u203A':'Back to golfer view  \u203A'):(nar?'Bird\u2019s eye':'Bird\u2019s eye view');if(el.textContent!==tx){el.textContent=tx;el.classList.toggle('pri',a);$('#mHint').innerHTML=a?'Aim on the map, then press the trackball<br>to go back and swing.':'Hold the red dot for 1 second, then drag to set spin.<br>Swipe it down, then up to swing.'}}
 function setP3(){G.p3=!!(G.players.length&&G.club===PUTTER&&([GREEN,FRINGE].includes(lieOf(curP().ball))||distPin(curP().ball)<30));if(G.p3){const b=curP().ball,h=G.hole;G.pcSnap=true;G.aimBase=h.mini?G.aim:Math.atan2(h.pin.x-b.x,-(h.pin.y-b.y));G.camYaw=G.aimBase;G.yawV=0}camLabel()}
 function is3D(){return!!(GLX.ok&&G.players.length&&(((G.phase==='aim'||G.phase==='swing')&&G.stage==='addr')||G.phase==='flight'||G.phase==='settle'))}
 function isP3(){return G.p3&&is3D()}
@@ -1333,7 +1335,7 @@ function resetSpin(){PRE.v=0;PRE.s=0;PRE.t=0}
 function beginTurn(){
  G.statOpen=false;G.tgtD=null;resetSwing();resetSpin();G.ballLock=null;G.shot=null;G.eng=null;G.swung=false;G.practice=false;G.practiceSel=!!GLX.ok;G.ghost=null;G.pracCount=0;G.pracUntil=0;G.stage='addr';G.pcCur=null;G.pcMode=0;G.puttUser=false;G.puttMode=null;G.puttLong=null;G.puttMode=autoPuttMode();G.puttLong=clamp(distPin(curP().ball)*1.9,PMODES[2].r,70);G.puttShort=clamp(distPin(curP().ball)*2.4+.3,1.6,PMODES[0].r);G.puttMed=clamp(distPin(curP().ball)*2.2,9,PMODES[1].r);G.phase='aim';G.club=autoClub();autoAim();frameAim();setP3();hud();
  if(false){G.p3Told=true;setTimeout(()=>toast('Putting view','Dots flow downhill. Click the green to aim. Right-click or Camera changes the angle.',2.6),300)}
- stageUI();if(GLX.ok&&!G.pracTold&&!G.online&&!isBot(curP())){G.pracTold=true;setTimeout(()=>{if(G.phase==='aim')toast('Practice, then play','Swipe your golfer for practice swings. Double-tap your golfer to switch to the real shot.',3)},2600)}if(!G.aimTold&&GLX.ok){G.aimTold=true;setTimeout(()=>toast('Behind the ball','Click the course to aim, swipe the trackball to swing. Bird\u2019s eye view is one tap away.',3),400)}
+ stageUI();if(GLX.ok&&!G.pracTold&&!G.online&&!isBot(curP())){G.pracTold=true;setTimeout(()=>{if(G.phase==='aim')toast('Practice, then play','Swipe your golfer for practice swings. Double-tap your golfer to switch to the real shot.',3)},2600)}if(!G.aimTold&&GLX.ok&&!isBot(curP())){G.aimTold=true;setTimeout(()=>toast('Behind the ball','Click the course to aim, swipe the trackball to swing. Bird\u2019s eye view is one tap away.',3),400)}
  if(G.players.length>1&&!G.online&&!isBot(curP()))toast(curP().name,'Stroke '+(curP().sc[G.holeIdx]+1)+' · '+fmtD(distPin(curP().ball))+' to the pin',1.4);
  botTurnUI();if(botControlled())botPlay();
 }
@@ -1970,7 +1972,7 @@ function drawTrackball(c,cx,cy,R,sk,roll,spin,eng,yaw=0){
  c.strokeStyle='rgba(0,0,0,.3)';c.lineWidth=Math.max(1,R*.03);c.beginPath();c.arc(cx,cy,R,0,7);c.stroke();
  // crosshair and strike point for spin
  if(spin){c.strokeStyle='rgba(255,255,255,.45)';c.lineWidth=1;c.beginPath();c.moveTo(cx-R*.85,cy);c.lineTo(cx+R*.85,cy);c.moveTo(cx,cy-R*.85);c.lineTo(cx,cy+R*.85);c.stroke();c.beginPath();c.arc(cx,cy,R*.45,0,7);c.stroke();
-  const dx=cx+spin[0]*R*.8,dy=cy-spin[1]*R*.8;c.fillStyle='#e8323c';c.strokeStyle='#fff';c.lineWidth=2;const dr=Math.max(5,R*.13);c.beginPath();c.arc(dx,dy,dr,0,7);c.fill();c.stroke();if(G.dotDrag){c.strokeStyle='rgba(255,220,60,.95)';c.lineWidth=3;c.beginPath();c.arc(dx,dy,dr+5+Math.sin(performance.now()/120)*1.5,0,7);c.stroke()}else if(G.dotHold0){const f=clamp((performance.now()-G.dotHold0)/1500,0,1);c.strokeStyle='rgba(255,255,255,.35)';c.lineWidth=3;c.beginPath();c.arc(dx,dy,dr+5,0,7);c.stroke();c.strokeStyle='#ffd23c';c.beginPath();c.arc(dx,dy,dr+5,-Math.PI/2,-Math.PI/2+f*Math.PI*2);c.stroke()}}
+  const dx=cx+spin[0]*R*.8,dy=cy-spin[1]*R*.8;c.fillStyle='#e8323c';c.strokeStyle='#fff';c.lineWidth=2;const dr=Math.max(5,R*.13);c.beginPath();c.arc(dx,dy,dr,0,7);c.fill();c.stroke();if(G.dotDrag){c.strokeStyle='rgba(255,220,60,.95)';c.lineWidth=3;c.beginPath();c.arc(dx,dy,dr+5+Math.sin(performance.now()/120)*1.5,0,7);c.stroke()}else if(G.dotHold0){const f=clamp((performance.now()-G.dotHold0)/1000,0,1);c.strokeStyle='rgba(255,255,255,.35)';c.lineWidth=3;c.beginPath();c.arc(dx,dy,dr+5,0,7);c.stroke();c.strokeStyle='#ffd23c';c.beginPath();c.arc(dx,dy,dr+5,-Math.PI/2,-Math.PI/2+f*Math.PI*2);c.stroke()}}
  if(eng){c.fillStyle='#5bc0ff';c.strokeStyle='#fff';c.lineWidth=1.5;c.beginPath();c.arc(cx+eng[0]*R*.8,cy-eng[1]*R*.8,Math.max(4,R*.09),0,7);c.fill();c.stroke()}
  c.restore();
 }
@@ -2132,16 +2134,16 @@ function drawProfile(c,cx,cy,R,Ro,ch,sk,roll,spin,eng,pose){
  if(has('scarf')){c.fillStyle=sk.shirt2;c.beginPath();c.ellipse(hx,hy+hr*1.0,hr*.75,hr*.18,0,0,7);c.fill()}
  c.restore();
 }
-function drawWidgetGuy(){const cvg=$('#guy'),w=cvg.clientWidth,h=cvg.clientHeight;if(!w)return;const d=Math.min(2,DPR||1);if(cvg.width!==Math.round(w*d)){cvg.width=Math.round(w*d);cvg.height=Math.round(h*d)}const c0=cvg.getContext('2d');c0.setTransform(1,0,0,1,0,0);c0.clearRect(0,0,cvg.width,cvg.height);const pl=curP();if(!pl)return;if(!G.offC)G.offC=document.createElement('canvas');const off=G.offC;if(off.width!==cvg.width||off.height!==cvg.height){off.width=cvg.width;off.height=cvg.height}const c=off.getContext('2d');c.setTransform(d,0,0,d,0,0);c.clearRect(0,0,w,h);
- const pd=SW.ph==='back'||SW.ph==='down'?(SW.pd||0):0,now=performance.now();let roll=(G.rollBase||0)-pd*3.2;
- if((G.phase==='flight'||G.phase==='settle'||G.pracUntil)&&SW.tImp){const e=clamp((now-SW.tImp)/600,0,1);roll=(G.rollBase||0)+(1-(1-e)*(1-e))*7}
+function drawWidgetGuy(){const S=swView(),PU=S===SW?G.pracUntil:S.pracA;const cvg=$('#guy'),w=cvg.clientWidth,h=cvg.clientHeight;if(!w)return;const d=Math.min(2,DPR||1);if(cvg.width!==Math.round(w*d)){cvg.width=Math.round(w*d);cvg.height=Math.round(h*d)}const c0=cvg.getContext('2d');c0.setTransform(1,0,0,1,0,0);c0.clearRect(0,0,cvg.width,cvg.height);const pl=curP();if(!pl)return;if(!G.offC)G.offC=document.createElement('canvas');const off=G.offC;if(off.width!==cvg.width||off.height!==cvg.height){off.width=cvg.width;off.height=cvg.height}const c=off.getContext('2d');c.setTransform(d,0,0,d,0,0);c.clearRect(0,0,w,h);
+ const pd=S.ph==='back'||S.ph==='down'?(S.pd||0):0,now=performance.now();let roll=(G.rollBase||0)-pd*3.2;
+ if((G.phase==='flight'||G.phase==='settle'||PU)&&S.tImp){const e=clamp((now-S.tImp)/600,0,1);roll=(G.rollBase||0)+(1-(1-e)*(1-e))*7}
  const ch=chOf(pl),sk=ch.skins[pl.skin|0]||ch.skins[0],putt=G.club===PUTTER,en=G.eng&&(G.eng.x||G.eng.y)&&(G.phase==='flight'||G.phase==='settle')?[clamp(PRE.s+G.eng.x*2,-1,1),clamp(PRE.v-G.eng.y*2,-1,1)]:null;
- const ph=SW.ph,since=SW.tImp?now-SW.tImp:1e9,after=(G.phase==='flight'||G.phase==='settle'||G.pracUntil)&&SW.tImp&&since<1700,b=pl.ball,pose={club:clubKind(),bob:Math.sin(now/520)*w*.006,seed:(pl.order||0)*977};
+ const ph=S.ph,since=S.tImp?now-S.tImp:1e9,after=(G.phase==='flight'||G.phase==='settle'||PU)&&S.tImp&&since<1700,b=pl.ball,pose={club:clubKind(),bob:Math.sin(now/520)*w*.006,seed:(pl.order||0)*977};
  if(ph==='back'||ph==='down'){pose.swing=clamp(-pd,-.3,1.3)/1.25*2.45;pose.mood='focus';pose.look=[0,.9];pose.bob=0}
  else if(after){const e=clamp(since/380,0,1);pose.swing=-(putt?1.1:2.55)*(1-(1-e)*(1-e));pose.look=[.4,-1];pose.mood=since>500&&G.shot&&shotScore(G.shot)>=75?'happy':null;pose.bob=0}
  else if(G.phase==='flight'||G.phase==='settle'){pose.look=[.3,-1];if(b&&b.holed){pose.mood='happy';pose.wave=1;pose.hop=Math.abs(Math.sin(now/140))*w*.03}}
  else if(G.phase==='aim'){const m=mouse.in?[(mouse.x-W/2)/W*2,(mouse.y-H/2)/H*2]:[0,0];pose.look=[clamp(m[0],-1,1),clamp(m[1],-1,1)]}
- pose.yaw=(G.yaw||0)+(G.yawSpin&&SW.tImp?G.yawSpin*(1-Math.pow(1-clamp(since/900,0,1),3)):0);pose.hs=.34;pose.tight=1;pose.lefty=pl.hand==='L';const rw=$('#ring').clientWidth||w/2.2,inner=rw/2*.85,R=inner-3,dy=0;G.guyGeo={R,dy};pose.hs=.36;pose.widget=1;drawProfile(c,w/2,h/2+dy,R,rw/2,ch,sk,roll,(putt||ph==='back'||ph==='down')?null:[PRE.s,PRE.v],en,pose);drawTrace(c,w/2,h/2+dy,R);
+ pose.yaw=(G.yaw||0)+(G.yawSpin&&S.tImp?G.yawSpin*(1-Math.pow(1-clamp(since/900,0,1),3)):0);pose.hs=.34;pose.tight=1;pose.lefty=pl.hand==='L';const rw=$('#ring').clientWidth||w/2.2,inner=rw/2*.85,R=inner-3,dy=0;G.guyGeo={R,dy};pose.hs=.36;pose.widget=1;drawProfile(c,w/2,h/2+dy,R,rw/2,ch,sk,roll,(putt||ph==='back'||ph==='down')?null:[PRE.s,PRE.v],en,pose);drawTrace(c,w/2,h/2+dy,R);
  // the ring hugs the ball: anything of the golfer lying over the power band is see-through
  const X=cvg.width/2,Y=cvg.height/2,ri=inner*d,ro=(rw/2+8)*d;
  {const ss=G.stage==='addr'&&(G.phase==='aim'||G.phase==='swing')?sideSlope():0,ta=clamp(-Math.atan(ss)*(curP()&&curP().hand==='L'?-1:1)*1.6,-.32,.32);G.tiltA=(G.tiltA||0)+(ta-(G.tiltA||0))*.15;if(Math.abs(G.tiltA)>.004){const X=cvg.width/2,Y=cvg.height/2;c0.save();c0.translate(X,Y);c0.rotate(G.tiltA);c0.drawImage(off,-X,-Y);c0.restore();c0.save();c0.translate(X,Y);c0.rotate(G.tiltA);c0.strokeStyle='rgba(255,255,255,.55)';c0.lineWidth=2*d;c0.setLineDash([6*d,5*d]);const gy=(rw/2+10)*d;c0.beginPath();c0.moveTo(-rw*.85*d,gy);c0.lineTo(rw*.85*d,gy);c0.stroke();c0.restore()}else c0.drawImage(off,0,0)}}
@@ -2238,7 +2240,7 @@ function showHelp(){const touch=matchMedia('(pointer:coarse)').matches;
 <li><b>Aim and distance:</b> tap a spot on the course or the bird's-eye map. The club and the Need mark on the power ring adjust to reach it. Or hold ◀ ▶.</li>
 <li><b>Swing:</b> swipe your golfer down, then straight up through the ball in one motion.</li>
 <li><b>Practice / real:</b> double-tap your golfer. Purple glow means practice; nothing counts.</li>
-<li><b>Spin:</b> hold the red dot 1.5 s until it chimes, drag it, let go.</li>
+<li><b>Spin:</b> hold the red dot 1 s until it chimes, drag it, let go.</li>
 <li><b>Steer in flight:</b> drag on the ball or course while it flies.</li>
 <li><b>Zoom (practice only):</b> pinch. Two-finger double-tap or Reset view to undo.</li>
 <li><b>Map:</b> tap the minimap or Bird's eye; pinch and drag to explore.</li>
@@ -2248,7 +2250,7 @@ function showHelp(){const touch=matchMedia('(pointer:coarse)').matches;
 <tr><td>Swing</td><td>Drag your golfer down, then up · or hold S, tap W</td></tr>
 <tr><td>Practice / real</td><td>Double-click golfer · P</td></tr>
 <tr><td>Club</td><td>Q / E · club buttons · or click a target</td></tr>
-<tr><td>Spin</td><td>Hold the red dot 1.5 s, then drag · arrows (Shift = fine) · R recentres</td></tr>
+<tr><td>Spin</td><td>Hold the red dot 1 s, then drag · arrows (Shift = fine) · R recentres</td></tr>
 <tr><td>Steer in flight</td><td>Drag on the ball or course</td></tr>
 <tr><td>Zoom (practice)</td><td>Mouse wheel · trackpad pinch</td></tr>
 <tr><td>Bird's eye</td><td>V or Space · right-click · + / − to zoom</td></tr>
@@ -2409,6 +2411,8 @@ function matchState(){if(!isMatch())return null;let up=0,played=0;const res=[];
  return{up,played,rem,over,lead,text,res}}
 /* ---------- bots ---------- */
 const gauss=()=>{let u=0,v=0;while(!u)u=Math.random();while(!v)v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)};
+// swing state to draw on the trackball: our own, or the one streamed from whoever is playing (player or bot)
+function swView(){const r=G.rsw;if(r&&performance.now()-r.at<1600&&(G.botTurn||document.body.classList.contains('p2p-spect')))return r;return SW}
 function botControlled(){const p=curP();if(!isBot(p))return false;if(!G.p2p)return true;const N=window.__NET2;return!!(N&&N.host)}
 function botTurnUI(){const p=curP(),on=G.players.length&&isBot(p)&&!G.p2pRemote&&G.phase!=='card'&&G.phase!=='menu'&&G.phase!=='intro';G.botTurn=!!on&&botControlled();
  document.body.classList.toggle('botturn',G.botTurn);const bb=$('#botBan');if(!bb)return;bb.hidden=!G.botTurn;if(G.botTurn){$('#botBanDot').style.background=p.color;$('#botBanTxt').innerHTML=esc(p.name)+' <small>'+BOTLV[p.bot].n+' bot · '+(G.phase==='aim'?'lining it up…':'stroke '+p.sc[G.holeIdx])+'</small>'}}
@@ -2430,7 +2434,14 @@ function botPlan(pl,tok,done){const h=G.hole,b=pl.ball,putt=G.club===PUTTER,cand
    if(!best||sc<best.sc)best={...c,sc}}
   if(i<cand.length)setTimeout(chunk,0);else{G.puttMode=sPM;G.puttLong=sPL;G.puttMed=sPMd;G.puttShort=sPS;done(best||{dir:G.aim,pw:.7})}};
  chunk()}
-function botShoot(pl,plan,lv){const h=G.hole,b=pl.ball,putt=G.club===PUTTER,k=putt?lv.putt*(h.mini?.7:1):1;
+function botShoot(pl,plan,lv){const tok=G.botTok,go=()=>G.botTok===tok&&G.phase==='aim'&&curP()===pl;
+ const T=[[0,'idle',0],[350,'back',.55],[850,'back',plan.pw],[1050,'down',.15],[1150,'done',0,1],[1900,'idle',0],[2300,'back',.4],[2900,'back',plan.pw*1.05],[3120,'down',.1],[3200,'hit']],t0=performance.now();let k=0;G.rsw={ph:'idle',pd:0,est:0,tImp:0,pracA:false,at:t0};G.practiceSel=true;
+ const tick=()=>{if(!go()){G.rsw=null;return}const now=performance.now(),el=now-t0;while(k<T.length-1&&el>=T[k+1][0])k++;const a=T[k],b2=T[Math.min(k+1,T.length-1)];
+  if(a[1]==='hit'){G.practiceSel=false;botFire(pl,plan,lv);G.rsw={ph:'done',pd:0,est:plan.pw,tImp:performance.now(),pracA:false,at:performance.now()};if(G.onBotSwing)G.onBotSwing(G.rsw);const keep=setInterval(()=>{if(!G.rsw||G.phase==='aim'||performance.now()-G.rsw.tImp>2500){clearInterval(keep);return}G.rsw.at=performance.now()},200);return}
+  const f=b2===a?1:clamp((el-a[0])/Math.max(1,b2[0]-a[0]),0,1),pd=a[1]==='back'?a[2]+((b2[1]==='back'?b2[2]:a[2])-a[2])*f:a[1]==='down'?a[2]*(1-f):0;if(el>1900)G.practiceSel=false;
+  if(a[1]==='done'&&(!G.rsw||G.rsw.ph!=='done'))G.rsw={...G.rsw,tImp:now};G.rsw={ph:a[1],pd:-pd*1.25,est:a[1]==='back'||a[1]==='down'?Math.min(1.2,pd*1.05):a[1]==='done'?plan.pw:0,tImp:a[1]==='done'?G.rsw.tImp:0,pracA:!!a[3],at:now,prac:el<1900};if(G.onBotSwing)G.onBotSwing(G.rsw);setTimeout(tick,40)};
+ tick()}
+function botFire(pl,plan,lv){const h=G.hole,b=pl.ball,putt=G.club===PUTTER,k=putt?lv.putt*(h.mini?.7:1):1;
  if(plan.m!=null){G.puttMode=plan.m;G.puttUser=true;G.puttLong=null;G.puttMed=null;G.puttShort=null}
  const dir=plan.dir+gauss()*lv.aim*k,pw=clamp(plan.pw*(1+gauss()*lv.pw*k),.03,1.2),lie=lieOf(b);
  G.aim=dir;pl.sc[G.holeIdx]++;G.ballLock={x:b.x,y:b.y};G.userZoom=1;G.yawSpin=0;resetSwing();shotSetup(b,pw,dir,0);snd(putt?'putt':lie===SAND?'sand':'hit');
@@ -2545,7 +2556,7 @@ for(const[id,dir]of[['#aimL',-1],['#aimR',1]]){const el=$(id);el.addEventListene
  ring.addEventListener('pointerdown',e=>{{const rr=ring.getBoundingClientRect(),onPad=e.target.closest&&e.target.closest('#pracPad');if(!onPad&&Math.hypot(e.clientX-(rr.left+rr.width/2),e.clientY-(rr.top+rr.height/2))>rr.width/2+4){if(G.phase==='aim'){aimAt(e.clientX,e.clientY);e.preventDefault()}return}}G.ringT=performance.now();G.swingSrc=e.target.closest&&e.target.closest('#pracPad')?'course':'ring';if(G.phase==='aim'&&G.stage==='aim'&&GLX.ok)setStage('addr');if(G.phase==='flight'&&SW.ph==='done'){e.preventDefault();try{ring.setPointerCapture(e.pointerId)}catch(_){}engDrag={x:e.clientX,y:e.clientY,k:1/240};return}if(G.phase!=='aim')return;e.preventDefault();try{ring.setPointerCapture(e.pointerId)}catch(_){}
   sx=lx=e.clientX;sy=ly=e.clientY;pull=e.pointerType==='mouse'?95:clamp((innerHeight-e.clientY-30)/1.08,58,115);
   {const g=$('#guy').getBoundingClientRect(),GG=G.guyGeo||{R:g.width*.1,dy:0},Rr=GG.R*.8*(G.p3?.84:1),dx0=g.left+g.width/2+PRE.s*Rr,dy0=g.top+g.height/2+GG.dy-PRE.v*Rr;G.onDot=G.club!==PUTTER&&Math.hypot(e.clientX-dx0,e.clientY-dy0)<Math.max(22,GG.R*.3)}
-  mode='pend';clearTimeout(G.holdTO);G.dotHold0=0;if(G.onDot&&G.phase==='aim'){G.dotHold0=performance.now();G.holdTO=setTimeout(()=>{G.dotHold0=0;if(mode==='pend'&&G.phase==='aim'&&SW.ph==='idle'){mode='dot';G.dotDrag=true;G.lastTap=0;snd('grab');try{navigator.vibrate&&navigator.vibrate([20,40,20])}catch(_){}toast('Spin dot grabbed. Drag it, then let go to set.')}},1500)}});
+  mode='pend';clearTimeout(G.holdTO);G.dotHold0=0;if(G.onDot&&G.phase==='aim'){G.dotHold0=performance.now();G.holdTO=setTimeout(()=>{G.dotHold0=0;if(mode==='pend'&&G.phase==='aim'&&SW.ph==='idle'){mode='dot';G.dotDrag=true;G.lastTap=0;snd('grab');try{navigator.vibrate&&navigator.vibrate([20,40,20])}catch(_){}toast('Spin dot grabbed. Drag it, then let go to set.')}},1000)}});
  ring.addEventListener('pointermove',e=>{if(!mode)return;
   if(mode==='dot'){setSpinGuy(e);return}
   if(mode==='pend'){const dy=e.clientY-sy,dx=e.clientX-sx;if(G.dotHold0){if(Math.hypot(dx,dy)<=12)return;clearTimeout(G.holdTO);G.dotHold0=0}lx=e.clientX;ly=e.clientY;if(dy>3&&dy>=Math.abs(dx)){mode='swing';G.touchSwing=e.pointerType!=='mouse';resetSwing();swingInput(dy*SENS/pull,0);lx=e.clientX;ly=e.clientY}return}
@@ -2597,7 +2608,7 @@ let last=performance.now();
 function update(dt,t){
  if(!G.hole)return;
  if(G.phase==='menu'){camT=holeFit(G.hole);camT.y+=Math.sin(t/5000)*12;camT.x+=Math.cos(t/7000)*10}
- {const tp=SW.ph==='back'||SW.ph==='down'?SW.p:0;SW.pd=(SW.pd||0)+(tp-(SW.pd||0))*Math.min(1,dt*22);SW.est=SW.keyMode?shotPower():SW.ph==='back'||SW.ph==='down'?liveEst():SW.ph==='idle'?0:(G.shot?G.shot.pw/100:0);stallCheck(performance.now());G.ringP=(G.ringP||0)+((SW.est||0)-(G.ringP||0))*Math.min(1,dt*18)}
+ {const WV=swView();const tp=SW.ph==='back'||SW.ph==='down'?SW.p:0;SW.pd=(SW.pd||0)+(tp-(SW.pd||0))*Math.min(1,dt*22);SW.est=SW.keyMode?shotPower():SW.ph==='back'||SW.ph==='down'?liveEst():SW.ph==='idle'?0:(G.shot?G.shot.pw/100:0);stallCheck(performance.now());G.ringP=(G.ringP||0)+(((WV===SW?SW.est:WV.est)||0)-(G.ringP||0))*Math.min(1,dt*18)}
  if(G.pracUntil&&performance.now()>G.pracUntil){G.pracUntil=0;resetSwing();G.phase='aim'}
  if(G.aimHold&&G.phase==='aim'){const th=performance.now()-G.aimHoldT;G.aim+=G.aimHold*dt*(th<450?.1:th<1400?.3:.65)}
  stepFx(dt);
@@ -2643,7 +2654,7 @@ window.__G=G;window.__ss=sideSlope;window.__sc=sideCurve;window.__shape=shotShap
 
 {
 const P2PCOL=['#ff5a5a','#5bc0ff','#ffd23f','#7dff9a'];
-const ACTS=['prof','lobby','start','shot','pos','rest','aim','hole','emote'];
+const ACTS=['prof','lobby','start','shot','pos','rest','aim','hole','emote','swing','ghost'];
 const NET2={room:null,code:'',host:false,me:'',hostId:'',order:[],profs:{},started:false,lastPos:0,lastAim:0,aimKey:''};
 window.__NET2=NET2;
 const P={name:'',col:0};try{Object.assign(P,JSON.parse(localStorage.getItem('flicklinks-p2p')||'{}'))}catch(_){}
@@ -2741,7 +2752,7 @@ async function enter(code,host){
   NET2.hostId=d.hostId||pid;NET2.order=d.order.slice();for(const k in NET2.profs)if(!d.order.includes(k)&&k!==NET2.me)delete NET2.profs[k];Object.assign(NET2.profs,d.profs||{});NET2.lfmt=d.fmt;NET2.lholes=d.holes;
   NET2.profs[NET2.me]=myProf();renderLobby()});
  R.on('start',(d,pid)=>{if(NET2.host||G.p2p)return;if(!d.players.some(p=>p.pid===NET2.me))return;NET2.hostId=pid;startGame(d)});
- R.on('emote',(d,pid)=>{if(G.p2p&&d&&typeof d.e==='number')emoShow(pid,d.e)});R.on('shot',onShot);R.on('pos',onPos);R.on('rest',onRest);R.on('aim',onAim);R.on('hole',onHole);
+ R.on('emote',(d,pid)=>{if(G.p2p&&d&&typeof d.e==='number')emoShow(pid,d.e)});R.on('swing',onSwing);R.on('ghost',onGhost);R.on('shot',onShot);R.on('pos',onPos);R.on('rest',onRest);R.on('aim',onAim);R.on('hole',onHole);
  setURL(code);
  stat((host?'Share the code. Friends join with it, or open your invite link.':'Looking for the host…')+(R.via?' · via '+R.via:''));
  if(!host)setTimeout(()=>{if(NET2.room&&NET2.code===code&&!NET2.order.length)stat('No host found yet. Check the code, or keep waiting while the room connects.')},9000);
@@ -2797,7 +2808,9 @@ function sendShot(){if(!(G.p2p&&mine()&&G.phase==='flight'&&G.shot&&!G.shot.prac
  }}
 G.onBotShot=sendShot;
 const _launch=launch;
-launch=function(){_launch.apply(this,arguments);sendShot()};
+launch=function(){_launch.apply(this,arguments);sendShot();
+ if(G.p2p&&mine()&&G.shot&&G.shot.practice&&G.ghost){const g=G.ghost;send('ghost',{pid:curP().pid,h:G.holeIdx,g:{x:g.x,y:g.y,d:g.d,res:g.res,land:g.land,putt:g.putt,pts:Array.from(g.pts||[]).map(v=>+(+v).toFixed(2))}})}};
+G.onBotSwing=r=>{if(!G.p2p||!NET2.host)return;const now=performance.now();send('swing',{pid:curP().pid,h:G.holeIdx,ph:r.ph,pd:+(r.pd||0).toFixed(3),est:+(r.est||0).toFixed(3),ti:r.tImp?Math.round(now-r.tImp):-1,pracA:!!r.pracA,prac:!!r.prac,ps:0,pv:0,ys:0})};
 const _endShot=endShot;
 endShot=function(){
  const local=G.p2p&&mine()&&!G.p2pRemote;
@@ -2833,7 +2846,8 @@ update=function(dt,t){
  _update(dt,t);
  if(G.p2p&&mine()&&!G.p2pRemote){const now=performance.now();
   if(G.phase==='flight'&&now-NET2.lastPos>=33){NET2.lastPos=now;const b=curP().ball;send('pos',{pid:curP().pid,h:G.holeIdx,x:b.x,y:b.y,z:b.z,vx:b.vx,vy:b.vy,vz:b.vz,s:b.state})}
-  else if((G.phase==='aim'||G.phase==='swing')&&now-NET2.lastAim>=120){const k=G.aim.toFixed(3)+'|'+G.club;if(k!==NET2.aimKey){NET2.aimKey=k;NET2.lastAim=now;send('aim',{pid:curP().pid,h:G.holeIdx,a:G.aim,c:G.club})}}}
+  if(!isBot(curP())&&(G.phase==='aim'||G.phase==='swing'||G.phase==='flight'||G.phase==='settle')){const live=SW.ph==='back'||SW.ph==='down'||(SW.tImp&&now-SW.tImp<1800);if(now-(NET2.lastSw||0)>=(live?45:250)){const m={pid:curP().pid,h:G.holeIdx,ph:SW.ph,pd:+(SW.pd||0).toFixed(3),est:+(SW.est||0).toFixed(3),ti:SW.tImp?Math.round(now-SW.tImp):-1,pracA:!!(G.pracUntil&&now<G.pracUntil),prac:!!G.practiceSel,ps:PRE.s,pv:PRE.v,ys:+(G.yawSpin||0).toFixed(2)},k=live?'':JSON.stringify({...m,ti:0});if(live||k!==NET2.swKey){NET2.swKey=k;NET2.lastSw=now;send('swing',m)}}}
+  if((G.phase==='aim'||G.phase==='swing')&&now-NET2.lastAim>=120){const k=G.aim.toFixed(3)+'|'+G.club;if(k!==NET2.aimKey){NET2.aimKey=k;NET2.lastAim=now;send('aim',{pid:curP().pid,h:G.holeIdx,a:G.aim,c:G.club})}}}
 };
 
 /* ---------- incoming game messages ---------- */
@@ -2848,6 +2862,9 @@ function onShot(d){
  G.camS=d.camS||G.camS;G.acc=0;G.p2pRemote=true;G.p2pTgt={x:b.x,y:b.y,z:b.z,vx:b.vx,vy:b.vy,vz:b.vz,s:b.state,t:performance.now()};
  G.phase='flight';snd(d.c===PUTTER?'putt':'hit');hud();turnUI();
 }
+function onSwing(d){if(!G.p2p||mine()||!curP()||curP().pid!==d.pid||d.h!==G.holeIdx)return;const now=performance.now();
+ G.rsw={ph:d.ph,pd:d.pd,est:d.est,tImp:d.ti>=0?now-d.ti:0,pracA:d.pracA,at:now};if(G.phase==='aim'||G.phase==='swing'){G.practiceSel=!!d.prac;PRE.s=d.ps||0;PRE.v=d.pv||0}G.yawSpin=d.ys||0}
+function onGhost(d){if(!G.p2p||mine()||!curP()||curP().pid!==d.pid||d.h!==G.holeIdx||G.phase!=='aim')return;G.ghost={...d.g,t:performance.now()}}
 function onPos(d){if(!G.p2p||!G.p2pRemote||d.h!==G.holeIdx||!curP()||curP().pid!==d.pid)return;G.p2pTgt={...d,t:performance.now()}}
 function onRest(d){
  if(!G.p2p||d.pid===NET2.me||(NET2.host&&G.players.some(p=>p.pid===d.pid&&isBot(p))))return;const i=idxOf(d.pid);if(i<0)return;const pl=G.players[i];
