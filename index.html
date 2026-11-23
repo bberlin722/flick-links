@@ -2229,23 +2229,26 @@ const mine=()=>G.p2p&&G.players.length&&curP()&&curP().pid===NET2.me;
 const snap=b=>{const o={};for(const k in b)if(k!=='trail')o[k]=b[k];return JSON.parse(JSON.stringify(o))};
 
 /* ---------- transport: Trystero over MQTT, falling back to Nostr ---------- */
+// Works with both Trystero APIs: older builds return [send, onReceive] from makeAction and take
+// callbacks via room.onPeerJoin(fn); current builds return an action object (send / onMessage) and use
+// assignable room.onPeerJoin / room.onPeerLeave properties. MQTT first, then Nostr.
+const SOURCES=[['MQTT','https://esm.sh/@trystero-p2p/mqtt'],['MQTT','https://esm.sh/trystero/mqtt'],['Nostr','https://esm.sh/trystero'],['Nostr','https://esm.run/trystero'],['Nostr','https://esm.sh/trystero/nostr']];
+function wrapRoom(mod,room,via){
+ const acts={};let modern=false;
+ for(const a of ACTS){const x=room.makeAction(a);if(Array.isArray(x))acts[a]={send:(d,to)=>x[0](d,to||null),on:fn=>x[1]((d,pid)=>fn(d,pid))};
+  else{modern=true;acts[a]={send:(d,to)=>to?x.send(d,{target:to}):x.send(d),on:fn=>{x.onMessage=(d,meta)=>fn(d,meta&&typeof meta==='object'?meta.peerId:meta)}}}}
+ const hook=(name,fn)=>{if(!modern&&typeof room[name]==='function'){try{room[name](fn);return}catch(_){}}room[name]=fn};
+ return{self:mod.selfId,via,send:(t,d,to)=>acts[t].send(d,to),on:(t,fn)=>acts[t].on(fn),onJoin:fn=>hook('onPeerJoin',fn),onLeave:fn=>hook('onPeerLeave',fn),leave:()=>{try{room.leave()}catch(_){}}};
+}
 async function openRoom(code){
  if(typeof window.__p2pMock==='function')return window.__p2pMock(code);
- let err=null;
- for(const url of['https://esm.sh/trystero/mqtt','https://esm.sh/trystero/nostr']){
-  try{
-   const mod=await import(url);
-   const room=mod.joinRoom({appId:'flick-links-golf-p2p'},'fl-'+code.toLowerCase());
-   const acts={};for(const a of ACTS)acts[a]=room.makeAction(a);
-   return{self:mod.selfId,
-    send:(t,d,to)=>acts[t][0](d,to||null),
-    on:(t,fn)=>acts[t][1](fn),
-    onJoin:fn=>room.onPeerJoin(fn),
-    onLeave:fn=>room.onPeerLeave(fn),
-    leave:()=>{try{room.leave()}catch(_){}}};
-  }catch(e){err=e}
+ const errs=[];
+ for(const[via,url]of(window.__p2pSources||SOURCES)){
+  try{const mod=typeof url==='string'?await import(url):url;if(!mod||typeof mod.joinRoom!=='function')throw new Error('no joinRoom');
+   const room=mod.joinRoom({appId:'flick-links-golf-p2p'},'fl-'+code.toLowerCase());return wrapRoom(mod,room,via)}
+  catch(e){errs.push(via+': '+(e&&e.message||e))}
  }
- throw err||new Error('no transport');
+ const err=new Error(errs.join(' | '));throw err;
 }
 const send=(t,d,to)=>{if(NET2.room)try{NET2.room.send(t,d,to)}catch(_){}};
 
@@ -2277,7 +2280,7 @@ function genCode(){const a='ABCDEFGHJKLMNPQRSTUVWXYZ';let c='';for(let i=0;i<4;i
 
 async function enter(code,host){
  stat('Connecting…');
- let R;try{R=await openRoom(code)}catch(e){stat('Could not start peer-to-peer play here. Open this file directly in Chrome, Safari, Edge or Firefox (not inside a preview window) and check your connection.');return}
+ let R;try{R=await openRoom(code)}catch(e){console.warn('P2P connect failed',e);stat('Could not reach the online-play service. Check your connection, try mobile data instead of Wi-Fi, or reload. ('+String(e&&e.message||e).slice(0,140)+')');return}
  Object.assign(NET2,{room:R,code,host,me:R.self,hostId:host?R.self:'',order:host?[R.self]:[],profs:{},started:false});
  NET2.profs[NET2.me]=myProf();
  R.onJoin(pid=>{send('prof',myProf(),pid);if(NET2.host)lobbyOut(pid)});
@@ -2294,7 +2297,7 @@ async function enter(code,host){
  R.on('start',(d,pid)=>{if(NET2.host||G.p2p)return;if(!d.players.some(p=>p.pid===NET2.me))return;NET2.hostId=pid;startGame(d)});
  R.on('shot',onShot);R.on('pos',onPos);R.on('rest',onRest);R.on('aim',onAim);R.on('hole',onHole);
  setURL(code);
- stat(host?'Share the code. Friends join with it, or open your invite link.':'Looking for the host…');
+ stat((host?'Share the code. Friends join with it, or open your invite link.':'Looking for the host…')+(R.via?' · via '+R.via:''));
  if(!host)setTimeout(()=>{if(NET2.room&&NET2.code===code&&!NET2.order.length)stat('No host found yet. Check the code, or keep waiting while the room connects.')},9000);
  renderLobby();
 }
