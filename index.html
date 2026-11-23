@@ -2232,23 +2232,33 @@ const snap=b=>{const o={};for(const k in b)if(k!=='trail')o[k]=b[k];return JSON.
 // Works with both Trystero APIs: older builds return [send, onReceive] from makeAction and take
 // callbacks via room.onPeerJoin(fn); current builds return an action object (send / onMessage) and use
 // assignable room.onPeerJoin / room.onPeerLeave properties. MQTT first, then Nostr.
-const SOURCES=[['MQTT','https://esm.sh/@trystero-p2p/mqtt'],['MQTT','https://esm.sh/trystero/mqtt'],['Nostr','https://esm.sh/trystero'],['Nostr','https://esm.run/trystero'],['Nostr','https://esm.sh/trystero/nostr']];
-function wrapRoom(mod,room,via){
- const acts={};let modern=false;
- for(const a of ACTS){const x=room.makeAction(a);if(Array.isArray(x))acts[a]={send:(d,to)=>x[0](d,to||null),on:fn=>x[1]((d,pid)=>fn(d,pid))};
-  else{modern=true;acts[a]={send:(d,to)=>to?x.send(d,{target:to}):x.send(d),on:fn=>{x.onMessage=(d,meta)=>fn(d,meta&&typeof meta==='object'?meta.peerId:meta)}}}}
- const hook=(name,fn)=>{if(!modern&&typeof room[name]==='function'){try{room[name](fn);return}catch(_){}}room[name]=fn};
- return{self:mod.selfId,via,send:(t,d,to)=>acts[t].send(d,to),on:(t,fn)=>acts[t].on(fn),onJoin:fn=>hook('onPeerJoin',fn),onLeave:fn=>hook('onPeerLeave',fn),leave:()=>{try{room.leave()}catch(_){}}};
+const SOURCES=[['MQTT','https://esm.sh/@trystero-p2p/mqtt@0.27.0'],['MQTT','https://esm.sh/@trystero-p2p/mqtt'],['MQTT','https://esm.sh/trystero/mqtt'],['Nostr','https://esm.sh/trystero'],['Nostr','https://esm.run/trystero'],['Nostr','https://esm.sh/trystero/nostr']];
+const withTimeout=(pr,ms,what)=>Promise.race([pr,new Promise((_,rej)=>setTimeout(()=>rej(new Error(what+' timed out')),ms))]);
+// set a handler whether the library wants it called (old style) or assigned (new style)
+const setHandler=(obj,name,fn)=>{let ok=false;if(typeof obj[name]==='function'){try{obj[name](fn);ok=true}catch(_){}}try{obj[name]=fn;ok=true}catch(_){}return ok};
+async function wrapRoom(mod,room,via){
+ if(Array.isArray(room))room=room[0];
+ if(!room||typeof room.makeAction!=='function')throw new Error('unexpected room object');
+ const acts={};
+ for(const a of ACTS){const x=room.makeAction(a);
+  if(Array.isArray(x))acts[a]={send:(d,to)=>x[0](d,to||null),on:fn=>x[1]((d,pid)=>fn(d,pid))};
+  else acts[a]={send:(d,to)=>{const r=to?x.send(d,{target:to}):x.send(d);if(r&&r.catch)r.catch(()=>{})},on:fn=>{const h=(d,meta)=>fn(d,meta&&typeof meta==='object'?meta.peerId:meta);if(typeof x.onReceive==='function'&&typeof x.onMessage!=='function'){try{x.onReceive(h)}catch(_){}}setHandler(x,'onMessage',h)}}}
+ let self=mod.selfId||room.selfId;
+ if(!self&&typeof room.getSelf==='function'){const me=await withTimeout(room.getSelf(),15000,'Getting your player ID');self=me&&(me.peerId||me.id||me)}
+ if(!self)throw new Error('no player ID');
+ return{self:String(self),via,send:(t,d,to)=>acts[t].send(d,to),on:(t,fn)=>acts[t].on(fn),onJoin:fn=>setHandler(room,'onPeerJoin',fn),onLeave:fn=>setHandler(room,'onPeerLeave',fn),leave:()=>{try{room.leave()}catch(_){}}};
 }
 async function openRoom(code){
  if(typeof window.__p2pMock==='function')return window.__p2pMock(code);
  const errs=[];
  for(const[via,url]of(window.__p2pSources||SOURCES)){
-  try{const mod=typeof url==='string'?await import(url):url;if(!mod||typeof mod.joinRoom!=='function')throw new Error('no joinRoom');
-   const room=mod.joinRoom({appId:'flick-links-golf-p2p'},'fl-'+code.toLowerCase());return wrapRoom(mod,room,via)}
+  try{stat('Connecting via '+via+'…');
+   const mod=typeof url==='string'?await withTimeout(import(url),15000,'Loading '+via):url;if(!mod||typeof mod.joinRoom!=='function')throw new Error('no joinRoom');
+   const room=mod.joinRoom({appId:'flick-links-golf-p2p'},'fl-'+code.toLowerCase());
+   return await wrapRoom(mod,room&&typeof room.then==='function'?await withTimeout(room,15000,'Joining'):room,via)}
   catch(e){errs.push(via+': '+(e&&e.message||e))}
  }
- const err=new Error(errs.join(' | '));throw err;
+ throw new Error(errs.join(' | '));
 }
 const send=(t,d,to)=>{if(NET2.room)try{NET2.room.send(t,d,to)}catch(_){}};
 
