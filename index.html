@@ -2688,9 +2688,34 @@ async function wrapRoom(mod,room,via){
  if(!self)throw new Error('no player ID');
  return{self:String(self),via,send:(t,d,to)=>acts[t].send(d,to),on:(t,fn)=>acts[t].on(fn),onJoin:fn=>setHandler(room,'onPeerJoin',p=>fn(pidOf(p))),onLeave:fn=>setHandler(room,'onPeerLeave',p=>fn(pidOf(p))),leave:()=>{try{room.leave()}catch(_){}}};
 }
+// Primary transport: relay every message through public MQTT brokers over secure WebSockets. Unlike WebRTC this
+// works through phone-carrier and home-router NATs, needs no server of our own, and stays serverless for the game.
+// Two brokers are used at once and duplicates are dropped, so one broker being down or slow doesn't split the room.
+const BROKERS=['wss://broker.emqx.io:8084/mqtt','wss://broker.hivemq.com:8884/mqtt','wss://test.mosquitto.org:8081/mqtt'];
+async function openRelay(code){
+ const mod=window.__mqttMod||await withTimeout(import('https://esm.sh/mqtt@5.10.1'),15000,'Loading MQTT'),mq=mod.connect?mod:(mod.default||mod);if(!mq||typeof mq.connect!=='function')throw new Error('no mqtt');
+ const me='p'+Math.random().toString(36).slice(2,10),topic='flicklinks/v2/'+code.toUpperCase(),h={},seen=new Map(),dedupe=new Set(),dq=[];let jf=()=>{},lf=()=>{},seq=0;
+ const enc=new TextEncoder(),dec=new TextDecoder(),clients=[];
+ const post=m=>{m.from=me;m.id=me+':'+(seq++);const s=JSON.stringify(m);for(const c of clients)if(c.connected)try{c.publish(topic,s,{qos:0})}catch(_){}};
+ const got=raw=>{let m;try{m=JSON.parse(typeof raw==='string'?raw:dec.decode(raw))}catch(_){return}if(!m||m.from===me)return;if(m.id){if(dedupe.has(m.id))return;dedupe.add(m.id);dq.push(m.id);if(dq.length>600)dedupe.delete(dq.shift())}
+  if(m.to&&m.to!==me)return;const known=seen.has(m.from);seen.set(m.from,performance.now());
+  if(m.t==='__bye'){if(known){seen.delete(m.from);lf(m.from)}return}
+  if(!known)jf(m.from);
+  if(m.t==='__hi'){post({t:'__here',to:m.from});return}if(m.t==='__here'||m.t==='__hb')return;
+  (h[m.t]||(()=>{}))(m.d,m.from)};
+ const conns=BROKERS.slice(0,2).map(url=>new Promise(res=>{let c;try{c=mq.connect(url,{clientId:me+'-'+url.length,keepalive:20,reconnectPeriod:3000,connectTimeout:8000,clean:true,will:{topic,payload:JSON.stringify({t:'__bye',from:me,id:me+':will'}),qos:0,retain:false}})}catch(e){res(null);return}
+  clients.push(c);c.on('message',(t,pl)=>got(pl));c.on('connect',()=>{c.subscribe(topic,{qos:0},()=>res(c))});c.on('error',()=>{});setTimeout(()=>res(null),9000)}));
+ const ok=(await Promise.all(conns)).filter(Boolean);
+ if(!ok.length){for(const c of clients)try{c.end(true)}catch(_){}throw new Error('no broker reachable')}
+ const hb=setInterval(()=>{post({t:'__hb'});const now=performance.now();for(const[id,t]of seen)if(now-t>15000){seen.delete(id);lf(id)}},4000);
+ setTimeout(()=>post({t:'__hi'}),150);setTimeout(()=>post({t:'__hi'}),2500);
+ return{self:me,via:'Relay',send:(t,d,to)=>post({t,d,to:to||null}),on:(t,f)=>{h[t]=f},onJoin:f=>{jf=f},onLeave:f=>{lf=f},
+  leave:()=>{clearInterval(hb);post({t:'__bye'});setTimeout(()=>{for(const c of clients)try{c.end(true)}catch(_){}},300)}};
+}
 async function openRoom(code){
  if(typeof window.__p2pMock==='function')return window.__p2pMock(code);
  const errs=[];
+ if(!window.__p2pSources){try{stat('Connecting…');return await openRelay(code)}catch(e){errs.push('Relay: '+(e&&e.message||e))}}
  for(const[via,url]of(window.__p2pSources||SOURCES)){
   try{stat('Connecting via '+via+'…');
    const mod=typeof url==='string'?await withTimeout(import(url),15000,'Loading '+via):url;if(!mod||typeof mod.joinRoom!=='function')throw new Error('no joinRoom');
